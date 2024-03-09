@@ -2,40 +2,31 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+               git branch: 'main',
+               url: 'https://github.com/DarkKnightSgh/Siri_Gowri_H_Jenkins.git'  
+            }
+        }
         stage('Build') {
             steps {
-                script {
-                    // Compile the .cpp file using shell script
-                    sh 'g++ -o PES1UG21CS599-1 hello.cpp'
-                }
+                build 'PES1UG21CS599-1’
+                sh 'g++ hello2.cpp -o output'
             }
         }
         stage('Test') {
             steps {
-                script {
-                    // Execute the compiled .cpp file and print output
-                    sh './PES1UG21CS599-1'
-                }
+                sh './output'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploy stage'
-                // Add deployment steps if necessary
+                echo 'deploy'
             }
         }
     }
 
     post {
-        always {
-            // Display 'pipeline failed' in case of any errors within the pipeline
-            catchError {
-                script {
-                    // Add any additional error handling or notifications here
-                    echo 'Pipeline succeeded!'
-                }
-            }
-        }
         failure {
             echo 'Pipeline failed!'
         }
